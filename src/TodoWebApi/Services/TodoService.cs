@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TodoWebApi.Core;
 using TodoWebApi.Core.Models;
+using TodoWebApi.Data;
 
 namespace TodoWebApi.Services
 {
@@ -27,6 +28,27 @@ namespace TodoWebApi.Services
         public async Task<IEnumerable<Todo>> GetAll()
         {
             return await unitOfWork.Todo.GetAll();
+        }
+
+        public async Task<Todo> GetById(int id)
+        {
+            return await unitOfWork.Todo.GetById(id);
+        }
+
+        public async Task Remove(Todo todo)
+        {
+            unitOfWork.Todo.Remove(todo);
+            await unitOfWork.CommitAsync();
+        }
+
+        public async Task Update(Todo todoForUpdate, Todo todo)
+        {
+            todoForUpdate.Title = todo.Title;
+            todoForUpdate.Completed = todo.Completed;
+            todoForUpdate.Order = todo.Order;
+
+            unitOfWork.Todo.Update(todoForUpdate);
+            await unitOfWork.CommitAsync();
         }
     }
 }

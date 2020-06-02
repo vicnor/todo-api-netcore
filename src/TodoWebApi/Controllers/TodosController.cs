@@ -27,10 +27,54 @@ namespace TodoWebApi.Controllers
         }
 
         [HttpPost("")]
-        public async Task<Todo> Add([FromBody] Todo entity)
+        public async Task<Todo> Add([FromBody] Todo todo)
         {
-            var added = await todoService.Add(entity);
+            var added = await todoService.Add(todo);
             return added;
+        }
+
+        [HttpGet("/{id}")]
+        public async Task<ActionResult<Todo>> GetById(int id)
+        {
+            var todo = await todoService.GetById(id);
+
+            if (todo == null)
+            {
+                return NotFound("Could not find todo with id " + id);
+            }
+
+            return todo;
+        }
+
+        [HttpPut("/{id}")]
+        public async Task<ActionResult<Todo>> Update(int id, [FromBody] Todo todo)
+        {
+            var todoForUpdate = await todoService.GetById(id);
+
+            if(todoForUpdate == null)
+            {
+                return NotFound("Could not find todo with id " + id);
+            }
+
+            await todoService.Update(todoForUpdate, todo);
+
+            var updatedTodo = await todoService.GetById(id);
+            return updatedTodo;
+        }
+
+        [HttpDelete("/{id}")]
+        public async Task<ActionResult> Remove(int id)
+        {
+            var todo = await todoService.GetById(id);
+
+            if (todo == null)
+            {
+                return NotFound("Could not find todo with id " + id);
+            }
+
+            await todoService.Remove(todo);
+
+            return NoContent();
         }
     }
 }

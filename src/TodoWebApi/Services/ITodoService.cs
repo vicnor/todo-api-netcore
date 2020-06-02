@@ -11,5 +11,8 @@ namespace TodoWebApi.Services
     {
         Task<IEnumerable<Todo>> GetAll();
         Task<Todo> Add(Todo entity);
+        Task<Todo> GetById(int id);
+        Task Update(Todo todoForUpdate, Todo todo);
+        Task Remove(Todo todo);
     }
 }
