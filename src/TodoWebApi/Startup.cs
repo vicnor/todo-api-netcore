@@ -30,6 +30,17 @@ namespace TodoWebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
+            services.AddDbContext<TodoDbContext>(options => options.UseInMemoryDatabase(databaseName: "TodoWebApi"));
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            });
+
             services.AddControllers();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -49,6 +60,8 @@ namespace TodoWebApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 

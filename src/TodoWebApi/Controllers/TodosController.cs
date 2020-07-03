@@ -9,7 +9,7 @@ using TodoWebApi.Services;
 
 namespace TodoWebApi.Controllers
 {
-    [Route("api/todos")]
+    [Route("api/[controller]")]
     [ApiController]
     public class TodosController : ControllerBase
     {
@@ -20,20 +20,23 @@ namespace TodoWebApi.Controllers
             this.todoService = todoService;
         }
 
-        [HttpGet("")]
+        // GET: api/Todos
+        [HttpGet]
         public async Task<IEnumerable<Todo>> GetAll()
         {
             return await todoService.GetAll();
         }
 
-        [HttpPost("")]
+        // POST: api/Todos
+        [HttpPost]
         public async Task<Todo> Add([FromBody] Todo todo)
         {
             var added = await todoService.Add(todo);
             return added;
         }
 
-        [HttpGet("/{id}")]
+        // GET: api/Todos/5
+        [HttpGet("{id}", Name = "GetById")]
         public async Task<ActionResult<Todo>> GetById(int id)
         {
             var todo = await todoService.GetById(id);
@@ -46,7 +49,8 @@ namespace TodoWebApi.Controllers
             return todo;
         }
 
-        [HttpPut("/{id}")]
+        // PUT: api/Todos/5
+        [HttpPut("{id}")]
         public async Task<ActionResult<Todo>> Update(int id, [FromBody] Todo todo)
         {
             var todoForUpdate = await todoService.GetById(id);
@@ -62,7 +66,8 @@ namespace TodoWebApi.Controllers
             return updatedTodo;
         }
 
-        [HttpDelete("/{id}")]
+        // DELETE: api/Todos/5
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Remove(int id)
         {
             var todo = await todoService.GetById(id);
